@@ -26,7 +26,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
     protected DayAdapter mDayAdapter;
     protected Calendar mCalendarFirstDay;
 
-    protected int mDayStyle;
+    protected int mDayStyle = 1;
 
     protected int mCurrentMonth;
     protected int mFirstDayOfWeek;
@@ -57,7 +57,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
 
     private void parseAttributes(final Context context, final AttributeSet attrs) {
         final Resources.Theme theme = context.getTheme();
-        if(theme != null) {
+        if (theme != null) {
             TypedArray a = theme.obtainStyledAttributes(
                     attrs,
                     R.styleable.AbstractCalendarView,
@@ -88,7 +88,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
      * @param dayStyle The style
      */
     public void setDayStyle(int dayStyle) {
-        if(DayStyleFactory.isValidStyle(dayStyle)) {
+        if (DayStyleFactory.isValidStyle(dayStyle)) {
             this.mDayStyle = dayStyle;
         } else {
             throw new IllegalArgumentException("Day Style is invalid. Check DayStyleFactory for options");
@@ -102,13 +102,13 @@ public abstract class AbstractCalendarView extends LinearLayout {
      * @param day Day of the week. e.g. Calendar.MONDAY
      */
     public void setFirstDayOfWeek(final int day) {
-        if(day < Calendar.SUNDAY || day > Calendar.SATURDAY) {
+        if (day < Calendar.SUNDAY || day > Calendar.SATURDAY) {
             throw new IllegalArgumentException("day must be between " + Calendar.SUNDAY + " and " + Calendar.SATURDAY);
         }
 
         mFirstDayOfWeek = day;
 
-        if(mFirstValidDay != null) {
+        if (mFirstValidDay != null) {
             // Fix first day of week in the Calendar
             mFirstValidDay.setFirstDayOfWeek(mFirstDayOfWeek);
 
@@ -127,7 +127,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
      * @param day Day of the week. e.g. Calendar.SUNDAY
      */
     public void setLastDayOfWeek(final int day) {
-        if(day < Calendar.SUNDAY || day > Calendar.SATURDAY) {
+        if (day < Calendar.SUNDAY || day > Calendar.SATURDAY) {
             throw new IllegalArgumentException("day must be between " + Calendar.SUNDAY + " and " + Calendar.SATURDAY);
         }
 
@@ -190,7 +190,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
      * @param newTypeFace The new Typeface which will be used, or null for default(Roboto Light)
      */
     public void setTypeface(final Typeface newTypeFace) {
-        if(newTypeFace != null) {
+        if (newTypeFace != null) {
             this.mTypeface = newTypeFace;
         } else {
             // newTypeFace is null, reset to default
@@ -219,7 +219,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
      */
     private void updateCalendar() {
         // throw an exception if there is no calendar available
-        if(mFirstValidDay == null) {
+        if (mFirstValidDay == null) {
             throw new NullPointerException("mFirstValidDay is null. " +
                     "Did you forget to call setFirstValidDay(Calendar) to set the month?");
         }
@@ -235,7 +235,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
 
         // get the number of days we need to remove from the calendar, to start the calendar at mFirstDayOfWeek;
         final int daysToWithdraw;
-        if(mFirstDayOfWeek > calendarDay)
+        if (mFirstDayOfWeek > calendarDay)
             daysToWithdraw = (calendarDay + DAYS_IN_WEEK) - mFirstDayOfWeek;
         else
             daysToWithdraw = calendarDay - mFirstDayOfWeek;
@@ -290,10 +290,10 @@ public abstract class AbstractCalendarView extends LinearLayout {
         final int daysInRow = getDaysInRow();
 
         final int dayWidth;
-        if(resizeWidth) {
+        if (resizeWidth) {
             // We may resize our View, so use our preferred size
             dayWidth = getResources().getDimensionPixelSize(R.dimen.lib_calendar_day_siz);
-        }  else {
+        } else {
             // We're not allowed to resize our View, so make sure it fits
             dayWidth = getAvailableDayWidth(maxWidth);
         }
@@ -317,10 +317,10 @@ public abstract class AbstractCalendarView extends LinearLayout {
 
         // Calculate the height of the weeks
         final int weeksInMonth;
-        if(this instanceof CalendarView) {
+        if (this instanceof CalendarView) {
             // If we're a single month, calculate the actual height
             weeksInMonth = mFirstValidDay.getActualMaximum(Calendar.WEEK_OF_MONTH);
-        }  else {
+        } else {
             weeksInMonth = MAX_WEEKS_IN_MONTH;
         }
         final int weekHeight = dayWidth * weeksInMonth + (paddingSides * (weeksInMonth + 1) * 2);
@@ -330,7 +330,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
 
 
         // If we're MultiCalendarView, also add the height of the TitlePageIndicator
-        if(this instanceof MultiCalendarView) {
+        if (this instanceof MultiCalendarView) {
             final MultiCalendarView multiCalendarView = (MultiCalendarView) this;
             final TitlePageIndicator indicator = multiCalendarView.getIndicator();
 
@@ -364,7 +364,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
      * @throws IllegalArgumentException Thrown when provided dayOfWeek is invalid
      */
     protected String getNameForDay(final int dayOfWeek, final Resources resources) throws IllegalArgumentException {
-        switch(dayOfWeek) {
+        switch (dayOfWeek) {
             case Calendar.MONDAY:
                 return resources.getString(R.string.lib_header_monday);
             case Calendar.TUESDAY:
@@ -389,7 +389,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
     @Override
     protected void onLayout(final boolean changed, final int l, final int t, final int r, final int b) {
 
-        if(!mIsViewInitialized) {
+        if (!mIsViewInitialized) {
             // initialize view
             initView();
         }
@@ -442,7 +442,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
     public int getDaysInRow() {
         int firstDayOfWeek = mFirstDayOfWeek;
         int daysInRow = 1;
-        while(firstDayOfWeek != mLastDayOfWeek) {
+        while (firstDayOfWeek != mLastDayOfWeek) {
             // Go to the next day in the week
             firstDayOfWeek = firstDayOfWeek % 7;
             firstDayOfWeek++;
@@ -456,6 +456,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
 
     /**
      * Return the currently selected dayStyle
+     *
      * @return the selected day style.
      */
     public int getDayStyle() {
@@ -464,6 +465,7 @@ public abstract class AbstractCalendarView extends LinearLayout {
 
     /**
      * Returns the currently selected Typeface
+     *
      * @return the selected typeface
      */
     public Typeface getTypeface() {

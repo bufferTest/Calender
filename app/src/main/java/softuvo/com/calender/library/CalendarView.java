@@ -86,8 +86,8 @@ public class CalendarView extends AbstractCalendarView implements View.OnClickLi
     @Override
     protected void initView() {
         // Set the background color
-        /*final int backgroundColor = DayStyleFactory.getBackgroundResourceForStyle(mDayStyle);
-        setBackgroundResource(backgroundColor);*/
+        final int backgroundColor = DayStyleFactory.getBackgroundResourceForStyle(mDayStyle);
+        setBackgroundResource(backgroundColor);
 
         // create the headers for the day of the week
         createHeaders();

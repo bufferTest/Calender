@@ -36,7 +36,7 @@ public class DayStyleFactory {
 
             default:
                 // Invalid style, throw exception
-                throw new IllegalArgumentException("Day Style is invalid, cannot inflate day layout.");
+                return (ViewGroup) inflater.inflate(R.layout.lib_calendar_day, parent, false);
         }
     }
 
